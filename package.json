@@ -1,0 +1,23 @@
+{
+  "name": "meters",
+  "version": "1.0.0",
+  "description": "A service to accept and recall meter reads",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://danieljtribe@github.com/danieljtribe/ecotricity-hiring.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/danieljtribe/ecotricity-hiring/issues"
+  },
+  "homepage": "https://github.com/danieljtribe/ecotricity-hiring#readme",
+  "dependencies": {
+    "jest": "^25.1.0",
+    "supertest": "^4.0.2"
+  }
+}
