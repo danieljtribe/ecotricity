@@ -14,9 +14,15 @@ router.get('/', async function(req: any, res: any) {
 router.post('/', async function(req: any, res: any) {
     const meterRead = req.body;
 
-    await validators.validateMeterRead(meterRead) ? res.status(200) : res.status(400);
-    res.send('')
-    //res.json({'value':true});
+    let validationResult = await validators.validateMeterRead(meterRead)
+    
+    if(!validationResult.success) {
+        res.status(400);
+        res.json({errors: validationResult.errors});
+    } else {
+        res.status(200);
+        res.json({});
+    }
 });
 
 module.exports = router;

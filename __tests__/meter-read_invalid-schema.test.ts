@@ -18,9 +18,10 @@ describe('Test invalid schemae', () => {
                     "readDate": "2017-11-20T16:19:48+00:00Z"
                 }
             ).then((response: any) => {
-            expect(response.statusCode).toBe(400);
-            done();
-        });
+                expect(response.statusCode).toBe(400);
+                expect(response.body.errors).toBeDefined();
+                done();
+            });
     });
 
     it('should NOT accept a schema with an invalid customerId', (done) => {
@@ -37,9 +38,10 @@ describe('Test invalid schemae', () => {
                     "readDate": "2017-11-20T16:19:48+00:00Z"
                 }
             ).then((response: any) => {
-            expect(response.statusCode).toBe(400);
-            done();
-        });
+                expect(response.statusCode).toBe(400);
+                expect(response.body.errors).toBeDefined();
+                done();
+            });
     });
 
     it('should NOTaccept a schema with a missing serialNumber', (done) => {
@@ -55,9 +57,10 @@ describe('Test invalid schemae', () => {
                     "readDate": "2017-11-20T16:19:48+00:00Z"
                 }
             ).then((response: any) => {
-            expect(response.statusCode).toBe(400);
-            done();
-        });
+                expect(response.statusCode).toBe(400);
+                expect(response.body.errors).toBeDefined();
+                done();
+            });
     });
 
     it('should NOT accept a schema with a missing mpxn', (done) => {
@@ -73,9 +76,10 @@ describe('Test invalid schemae', () => {
                     "readDate": "2017-11-20T16:19:48+00:00Z"
                 }
             ).then((response: any) => {
-            expect(response.statusCode).toBe(400);
-            done();
-        });
+                expect(response.statusCode).toBe(400);
+                expect(response.body.errors).toBeDefined();
+                done();
+            });
     });
 
     it('should NOT accept a schema with a missing read', (done) => {
@@ -88,9 +92,10 @@ describe('Test invalid schemae', () => {
                     "readDate": "2017-11-20T16:19:48+00:00Z"
                 }
             ).then((response: any) => {
-            expect(response.statusCode).toBe(400);
-            done();
-        });
+                expect(response.statusCode).toBe(400);
+                expect(response.body.errors).toBeDefined();
+                done();
+            });
     });
 
     it('should NOT accept a schema with a missing read.type', (done) => {
@@ -107,9 +112,10 @@ describe('Test invalid schemae', () => {
                     "readDate": "2017-11-20T16:19:48+00:00Z"
                 }
             ).then((response: any) => {
-            expect(response.statusCode).toBe(400);
-            done();
-        });
+                expect(response.statusCode).toBe(400);
+                expect(response.body.errors).toBeDefined();
+                done();
+            });
     });
 
 
@@ -127,9 +133,10 @@ describe('Test invalid schemae', () => {
                     "readDate": "2017-11-20T16:19:48+00:00Z"
                 }
             ).then((response: any) => {
-            expect(response.statusCode).toBe(400);
-            done();
-        });
+                expect(response.statusCode).toBe(400);
+                expect(response.body.errors).toBeDefined();
+                done();
+            });
     });
 
     it('should NOT accept a schema with a missing read.value', (done) => {
@@ -146,9 +153,10 @@ describe('Test invalid schemae', () => {
                     "readDate": "2017-11-20T16:19:48+00:00Z"
                 }
             ).then((response: any) => {
-            expect(response.statusCode).toBe(400);
-            done();
-        });
+                expect(response.statusCode).toBe(400);
+                expect(response.body.errors).toBeDefined();
+                done();
+            });
     });
 
     it('should NOT accept a schema with a missing readDate', (done) => {
@@ -164,9 +172,10 @@ describe('Test invalid schemae', () => {
                     ]
                 }
             ).then((response: any) => {
-            expect(response.statusCode).toBe(400);
-            done();
-        });
+                expect(response.statusCode).toBe(400);
+                expect(response.body.errors).toBeDefined();
+                done();
+            });
     });
 
 });

@@ -5,14 +5,14 @@ export {};
 
 describe('Test meter read functionality', () => {
 
-    it('should response the GET method', (done) => {
+    it('should respond to the GET method', (done) => {
         request(app).get('/meter-read').then((response: any) => {
             expect(response.statusCode).toBe(200);
             done();
         });
     });
 
-    it('should accept a valid schema', (done) => {
+    it('should accept a valid schema to the POST method', (done) => {
         request(app).post('/meter-read')
             .send(
                 {
@@ -26,9 +26,10 @@ describe('Test meter read functionality', () => {
                     "readDate": "2017-11-20T16:19:48+00:00Z"
                 }
             ).then((response: any) => {
-            expect(response.statusCode).toBe(200);
-            done();
-        });
+                expect(response.statusCode).toBe(200);
+                expect(response.body.errors).not.toBeDefined();
+                done();
+            });
     });
 
 });

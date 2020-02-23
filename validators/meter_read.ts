@@ -23,16 +23,26 @@ const meter_readSchema = Joi.object({
 module.exports = {
     async validateMeterRead(reading: any) {
         try{
-            let validation = await meter_readSchema.validate(reading);
+            let validation = await meter_readSchema.validate(reading, {abortEarly: false});
             if(validation.error) {
-                //console.error(validation.error)
-                return(false);
+                let errors: any[] = [];
+                validation.error.details.forEach((errorDetails: any) => { errors.push(errorDetails.message) });
+                
+                return({
+                    success: false,
+                    errors
+                });
             } else {
-                return(true);
+                return({
+                    success: true,
+                    errors: []
+                });
             }
         } catch(e) {
-            //console.error(e);
-            return(false);
+            return({
+                success: true,
+                errors: []
+            });
         }
     }
 }
