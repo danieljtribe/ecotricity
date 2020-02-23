@@ -20,8 +20,7 @@ const meter_readSchema = Joi.object({
     readDate: Joi.string().required()
     });
 
-module.exports = {
-    async validateMeterRead(reading: any) {
+    async function validateMeterRead(reading: any) {
         try{
             let validation = await meter_readSchema.validate(reading, {abortEarly: false});
             if(validation.error) {
@@ -45,4 +44,5 @@ module.exports = {
             });
         }
     }
-}
+
+export { validateMeterRead }

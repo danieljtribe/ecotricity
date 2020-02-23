@@ -1,11 +1,14 @@
 const express = require('express');
-const router = express.Router();
+const router  = express.Router();
 
-const validators = require('../validators/meter_read');
+import { validateMeterRead } from '../validators/meter_read';
+import { asyncMiddleware } from '../middleware/asyncMiddleware';
+
+export {};
 
 /* /meter-read */
-router.get('/', async function(req: any, res: any) {
-
+router.get('/', asyncMiddleware, async function(req: any, res: any) {
+    //console.log(await req.database.query('SELECT * FROM table'));
     res.status(200);
     res.json({'value':true});
 });
@@ -14,7 +17,7 @@ router.get('/', async function(req: any, res: any) {
 router.post('/', async function(req: any, res: any) {
     const meterRead = req.body;
 
-    let validationResult = await validators.validateMeterRead(meterRead)
+    let validationResult = await validateMeterRead(meterRead)
     
     if(!validationResult.success) {
         res.status(400);
