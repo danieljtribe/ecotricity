@@ -12,9 +12,9 @@ const meter_readSchema = Joi.object({
         .required(),
     read: Joi.array().items(
             Joi.object({
-                type: Joi.string(),
-                registerId: Joi.number(),
-                value: Joi.number()
+                type: Joi.string().required(),
+                registerId: Joi.number().required(),
+                value: Joi.number().required()
             })
         ).required(),
     readDate: Joi.string().required()
