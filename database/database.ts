@@ -1,7 +1,7 @@
-const mysql = require("promise-mysql");
+const mysql: any = require("promise-mysql");
 
-async function getConnection() {
-    let pool = 
+async function getConnection(): Promise<any> {
+    let pool: any = 
         await mysql.createPool({
             database: process.env.MYSQL_DATABASE,
             host: process.env.MYSQL_HOSTNAME,
@@ -12,8 +12,4 @@ async function getConnection() {
     return pool;
 }
 
-async function closeConnection(pool: any) {
-    pool.end();
-}
-
-export { getConnection, closeConnection }
+export { getConnection }

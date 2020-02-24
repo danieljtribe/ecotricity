@@ -1,5 +1,5 @@
-const express = require('express');
-const meter_read_router  = express.Router();
+const express: any = require('express');
+const meter_read_router: any  = express.Router();
 
 import { validateMeterRead } from '../validators/meter_read';
 
@@ -18,10 +18,9 @@ meter_read_router.get('/meter/:serialNumber', async function(req: any, res: any)
     await getMeterReadingByAttribute(req, res, 'serialNumber', serialNumber)
 });
 
-
 /* /meter-read */
 meter_read_router.post('/', async function(req: any, res: any) {
-    const meterRead = req.body;
+    const meterRead: any = req.body;
 
     let validationResult = await validateMeterRead(meterRead)
     

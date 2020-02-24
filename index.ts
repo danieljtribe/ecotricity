@@ -1,14 +1,14 @@
 require("dotenv").config();
 
-const bodyParser = require("body-parser");
-const express    = require("express");
+const bodyParser: any = require("body-parser");
+const express: any    = require("express");
 
-const port = process.env.PORT || 3000;
-const app = express();
+const port : string = process.env.PORT || '3000';
+const app : any = express();
 
 let databasePool: any;
 
-import { getConnection, closeConnection } from './database/database';
+import { getConnection } from './database/database';
 
 export {};
 
@@ -24,10 +24,7 @@ import { meter_read_router } from './routes/meter_read';
 app.use("/meter-read", meter_read_router);
 
 if (process.env.NODE_ENV !== 'test') {
-    app.listen(port);
-    app.on("listening", () => console.info(`Meter Read API started on port: ${app.address().port}`));
+    app.listen(port, () => console.log(`Meter Read API started on port ${port}`));
 }
-
-app.on("close", () => { console.log(`Meter Read API stopping`); closeConnection(databasePool) })
 
 module.exports = app
