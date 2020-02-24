@@ -12,4 +12,8 @@ async function getConnection() {
     return pool;
 }
 
-export { getConnection }
+async function closeConnection(pool: any) {
+    pool.end();
+}
+
+export { getConnection, closeConnection }
