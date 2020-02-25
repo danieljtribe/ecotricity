@@ -1,5 +1,5 @@
-const express: any = require('express');
-const meter_read_router: any  = express.Router();
+import express from 'express';
+const meterReadRouter: any  = express.Router();
 
 import { validateMeterRead } from '../validators/meter_read';
 
@@ -12,7 +12,7 @@ export {};
  * @param {any} req - Express request object.
  * @param {any} res - Express response object.
  */
-meter_read_router.get('/customer/:customerId', async function(req: any, res: any) {
+meterReadRouter.get('/customer/:customerId', async (req: any, res: any) => {
     const customerId = req.params.customerId;
 
     await getMeterReadingByAttribute(req, res, 'customerId', customerId)
@@ -25,7 +25,7 @@ meter_read_router.get('/customer/:customerId', async function(req: any, res: any
  * @param {any} req - Express request object.
  * @param {any} res - Express response object.
  */
-meter_read_router.get('/meter/:serialNumber', async function(req: any, res: any) {
+meterReadRouter.get('/meter/:serialNumber', async (req: any, res: any) => {
     const serialNumber = req.params.serialNumber;
 
     await getMeterReadingByAttribute(req, res, 'serialNumber', serialNumber)
@@ -38,24 +38,24 @@ meter_read_router.get('/meter/:serialNumber', async function(req: any, res: any)
  * @param {any} res - Express response object.
  * @param {any} meterRead - Meter Read data.
  */
-meter_read_router.post('/', async function(req: any, res: any) {
+meterReadRouter.post('/', async (req: any, res: any) => {
     const meterRead: any = req.body;
 
-    let validationResult = await validateMeterRead(meterRead)
-    
+    const validationResult = await validateMeterRead(meterRead)
+
     if(!validationResult.success) {
         res.status(400);
         res.json({errors: validationResult.errors});
     } else {
-        let crypto = require('crypto');
-        let meterReadId = [meterRead.customerId, meterRead.serialNumber, meterRead.mpxn, meterRead.readDate].join(',');
-        let meterReadHash = crypto.createHash('sha256').update(meterReadId).digest('hex');
+        const crypto = require('crypto');
+        const meterReadId = [meterRead.customerId, meterRead.serialNumber, meterRead.mpxn, meterRead.readDate].join(',');
+        const meterReadHash = crypto.createHash('sha256').update(meterReadId).digest('hex');
 
         try {
             await req.databasePool.query('INSERT INTO meter_read_details (id, customerId, serialNumber, mpxn, readDate) VALUES (?, ?, ?, ?, ?)', [meterReadHash, meterRead.customerId, meterRead.serialNumber, meterRead.mpxn, meterRead.readDate]);
 
-            for(let i = 0; i < meterRead.read.length; i++) {
-                await req.databasePool.query('INSERT INTO meter_read_readings (meter_read_details_id, type, registerId, value) VALUES (?, ?, ?, ?)', [meterReadHash, meterRead.read[i].type, meterRead.read[i].registerId, meterRead.read[i].value]);
+            for (const read of meterRead.read) {
+                await req.databasePool.query('INSERT INTO meter_read_readings (meter_read_details_id, type, registerId, value) VALUES (?, ?, ?, ?)', [meterReadHash, read.type, read.registerId, read.value]);
             }
 
             res.status(200);
@@ -65,11 +65,9 @@ meter_read_router.post('/', async function(req: any, res: any) {
                 res.status(400);
                 res.json({errors: 'Reading with this ID already submitted.'});
             } else if(e.code) {
-                console.error(e);
                 res.status(500);
                 res.json({errors: 'Internal server error.'});
             } else {
-                console.error(e);
                 res.status(500);
                 res.json({errors: 'Internal server error.'});
             }
@@ -84,7 +82,7 @@ meter_read_router.post('/', async function(req: any, res: any) {
  * @param {any} req - Express request object.
  * @param {any} res - Express response object.
  */
-meter_read_router.delete('/:meterReadHash', async function(req: any, res: any) {
+meterReadRouter.delete('/:meterReadHash', async (req: any, res: any) => {
     const meterReadHash = req.params.meterReadHash;
 
     await req.databasePool.query('DELETE FROM meter_read_details WHERE id = ?', [meterReadHash]);
@@ -102,21 +100,21 @@ meter_read_router.delete('/:meterReadHash', async function(req: any, res: any) {
  * @param {string} attributeValue - Schema value to match upon
  */
 async function getMeterReadingByAttribute(req: any, res: any, attributeName: string, attributeValue: string) {
-    let read_details = await req.databasePool.query('SELECT * FROM meter_read_details WHERE ?? = ? ORDER BY readDate ASC', [attributeName, attributeValue]);
+    const readings = await req.databasePool.query('SELECT * FROM meter_read_details WHERE ?? = ? ORDER BY readDate ASC', [attributeName, attributeValue]);
 
-    if(read_details.length > 0) {
-        for(let i = 0; i < read_details.length; i++) {
-            let read = await req.databasePool.query('SELECT type, registerId, value FROM meter_read_readings WHERE meter_read_details_id = ?', [read_details[i].id]);
-            delete read_details[i].id;
+    if(readings.length > 0) {
+        for(const readDetails of readings) {
+            const read = await req.databasePool.query('SELECT type, registerId, value FROM meter_read_readings WHERE meter_read_details_id = ?', [readDetails.id]);
+            delete readDetails.id;
 
-            read_details[i].read = read;
+            readDetails.read = read;
         }
         res.status(200);
-        res.json({'value': read_details});
+        res.json({'value': readings});
     } else {
         res.status(404);
         res.json({errors: 'Reading not found.'});
     }
 }
 
-export { meter_read_router };
+export { meterReadRouter };
