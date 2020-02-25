@@ -1,6 +1,6 @@
 const Joi = require('@hapi/joi').extend(require('@hapi/joi-date'));
 
-const meter_readSchema = Joi.object({
+const meterReadSchema = Joi.object({
     customerId: Joi.string()
         .alphanum()
         .required(),
@@ -22,11 +22,11 @@ const meter_readSchema = Joi.object({
 
     async function validateMeterRead(reading: any) {
         try{
-            let validation = await meter_readSchema.validate(reading, {abortEarly: false});
+            const validation = await meterReadSchema.validate(reading, {abortEarly: false});
             if(validation.error) {
-                let errors: any[] = [];
+                const errors: any[] = [];
                 validation.error.details.forEach((errorDetails: any) => { errors.push(errorDetails.message) });
-                
+
                 return({
                     success: false,
                     errors

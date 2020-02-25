@@ -1,12 +1,10 @@
-require("dotenv").config();
+import bodyParser from 'body-parser';
+import express from 'express';
 
-const bodyParser: any = require("body-parser");
-const express: any    = require("express");
+require("dotenv").config();
 
 const port : string = process.env.PORT || '3000';
 const app : any = express();
-
-let databasePool: any;
 
 import { createConnectionPool } from './database/database';
 
@@ -23,7 +21,7 @@ app.use(bodyParser.json());
  */
 app.use(async (req: any, res: any, next: any) => {
     try {
-        databasePool = await createConnectionPool();
+        let databasePool = await createConnectionPool();
         req.databasePool = databasePool;
         await req.databasePool.getConnection();
         next();
@@ -38,11 +36,11 @@ app.use(async (req: any, res: any, next: any) => {
     }
 });
 
-import { meter_read_router } from './routes/meter_read';
-app.use("/meter-read", meter_read_router);
+import { meterReadRouter } from './routes/meter_read';
+app.use("/meter-read", meterReadRouter);
 
 if (process.env.NODE_ENV !== 'test') {
-    app.listen(port, () => console.log(`Meter Read API started on port ${port}`));
+    app.listen(port, () => console.info(`Meter Read API started on port ${port}`));
 }
 
 module.exports = app

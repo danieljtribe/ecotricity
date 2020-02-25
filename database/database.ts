@@ -1,7 +1,7 @@
-const mysql: any = require("promise-mysql");
+import mysql from 'promise-mysql';
 
 async function createConnectionPool(): Promise<any> {
-    let pool: any = 
+    const pool: any =
         await mysql.createPool({
             database: process.env.MYSQL_DATABASE,
             host: process.env.MYSQL_HOSTNAME,
