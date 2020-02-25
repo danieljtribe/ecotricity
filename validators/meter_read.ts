@@ -39,8 +39,8 @@ const meter_readSchema = Joi.object({
             }
         } catch(e) {
             return({
-                success: true,
-                errors: []
+                success: false,
+                errors: ['Internal Validator error']
             });
         }
     }

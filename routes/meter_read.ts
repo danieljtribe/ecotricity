@@ -8,7 +8,7 @@ export {};
 /**
  * Presents stored meter readings for a given Customer ID.
  * @name GET/meter-read/customer
- * @param {any} customerId - Customer ID.
+ * @param {string} customerId - Customer ID.
  * @param {any} req - Express request object.
  * @param {any} res - Express response object.
  */
@@ -21,7 +21,7 @@ meter_read_router.get('/customer/:customerId', async function(req: any, res: any
 /**
  * Presents stored meter readings for a given meter Serial Number.
  * @name GET/meter-read/serialNumber
- * @param {any} serialNumber - Meter Serial Number.
+ * @param {string} serialNumber - Meter Serial Number.
  * @param {any} req - Express request object.
  * @param {any} res - Express response object.
  */
@@ -80,9 +80,9 @@ meter_read_router.post('/', async function(req: any, res: any) {
 /**
  * Deletes stored meter readings.
  * @name DELETE/meter-read
+ * @param {string} meterReadHash - Meter Read hash value.
  * @param {any} req - Express request object.
  * @param {any} res - Express response object.
- * @param {any} meterReadHash - Meter Read hash value.
  */
 meter_read_router.delete('/:meterReadHash', async function(req: any, res: any) {
     const meterReadHash = req.params.meterReadHash;
@@ -94,17 +94,25 @@ meter_read_router.delete('/:meterReadHash', async function(req: any, res: any) {
     res.json({});
 });
 
+/**
+ * Retrieve all meter readings for a customer based upon a given attribute name and its value
+ * @param {any} req - Express request object.
+ * @param {any} res - Express response object.
+ * @param {string} attributeName - Schema attribute name to search upon
+ * @param {string} attributeValue - Schema value to match upon
+ */
 async function getMeterReadingByAttribute(req: any, res: any, attributeName: string, attributeValue: string) {
-    let read_details = await req.databasePool.query('SELECT * FROM meter_read_details WHERE ?? = ?', [attributeName, attributeValue]);
+    let read_details = await req.databasePool.query('SELECT * FROM meter_read_details WHERE ?? = ? ORDER BY readDate ASC', [attributeName, attributeValue]);
 
     if(read_details.length > 0) {
-        let read = await req.databasePool.query('SELECT type, registerId, value FROM meter_read_readings WHERE meter_read_details_id = ?', [read_details[0].id]);
-        delete read_details[0].id;
+        for(let i = 0; i < read_details.length; i++) {
+            let read = await req.databasePool.query('SELECT type, registerId, value FROM meter_read_readings WHERE meter_read_details_id = ?', [read_details[i].id]);
+            delete read_details[i].id;
 
-        read_details[0].read = read;
-
+            read_details[i].read = read;
+        }
         res.status(200);
-        res.json({'value': read_details[0]});
+        res.json({'value': read_details});
     } else {
         res.status(404);
         res.json({errors: 'Reading not found.'});
