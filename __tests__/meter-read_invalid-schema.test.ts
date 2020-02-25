@@ -44,7 +44,7 @@ describe('Test invalid schemae', () => {
             });
     });
 
-    it('should NOTaccept a schema with a missing serialNumber', (done) => {
+    it('should NOT accept a schema with a missing serialNumber', (done) => {
         request(app).post('/meter-read')
             .send(
                 {

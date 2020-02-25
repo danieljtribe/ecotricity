@@ -5,20 +5,39 @@ import { validateMeterRead } from '../validators/meter_read';
 
 export {};
 
-/* /meter-read */
+/**
+ * Presents stored meter readings for a given Customer ID.
+ * @name GET/meter-read/customer
+ * @param {any} customerId - Customer ID.
+ * @param {any} req - Express request object.
+ * @param {any} res - Express response object.
+ */
 meter_read_router.get('/customer/:customerId', async function(req: any, res: any) {
     const customerId = req.params.customerId;
 
     await getMeterReadingByAttribute(req, res, 'customerId', customerId)
 });
 
+/**
+ * Presents stored meter readings for a given meter Serial Number.
+ * @name GET/meter-read/serialNumber
+ * @param {any} serialNumber - Meter Serial Number.
+ * @param {any} req - Express request object.
+ * @param {any} res - Express response object.
+ */
 meter_read_router.get('/meter/:serialNumber', async function(req: any, res: any) {
     const serialNumber = req.params.serialNumber;
 
     await getMeterReadingByAttribute(req, res, 'serialNumber', serialNumber)
 });
 
-/* /meter-read */
+/**
+ * Accepts, validates and stores meter readings.
+ * @name POST/meter-read
+ * @param {any} req - Express request object.
+ * @param {any} res - Express response object.
+ * @param {any} meterRead - Meter Read data.
+ */
 meter_read_router.post('/', async function(req: any, res: any) {
     const meterRead: any = req.body;
 
@@ -58,7 +77,13 @@ meter_read_router.post('/', async function(req: any, res: any) {
     }
 });
 
-/* /meter-read */
+/**
+ * Deletes stored meter readings.
+ * @name DELETE/meter-read
+ * @param {any} req - Express request object.
+ * @param {any} res - Express response object.
+ * @param {any} meterReadHash - Meter Read hash value.
+ */
 meter_read_router.delete('/:meterReadHash', async function(req: any, res: any) {
     const meterReadHash = req.params.meterReadHash;
 

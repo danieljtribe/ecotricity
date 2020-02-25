@@ -14,6 +14,13 @@ export {};
 
 app.use(bodyParser.json());
 
+/**
+ * Opens a connection to the backend database and adds this pool connection
+ *  to the Express request object.
+ * @param {any} req - Express request object.
+ * @param {any} res - Express response object.
+ * @param {any} next - Next Express middleware.
+ */
 app.use(async (req: any, res: any, next: any) => {
     databasePool = await getConnection();
     req.databasePool = databasePool;
