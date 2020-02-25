@@ -8,7 +8,7 @@ const app : any = express();
 
 let databasePool: any;
 
-import { getConnection } from './database/database';
+import { createConnectionPool } from './database/database';
 
 export {};
 
@@ -22,7 +22,7 @@ app.use(bodyParser.json());
  * @param {any} next - Next Express middleware.
  */
 app.use(async (req: any, res: any, next: any) => {
-    databasePool = await getConnection();
+    databasePool = await createConnectionPool();
     req.databasePool = databasePool;
     next();
 });

@@ -1,6 +1,6 @@
 const mysql: any = require("promise-mysql");
 
-async function getConnection(): Promise<any> {
+async function createConnectionPool(): Promise<any> {
     let pool: any = 
         await mysql.createPool({
             database: process.env.MYSQL_DATABASE,
@@ -12,4 +12,4 @@ async function getConnection(): Promise<any> {
     return pool;
 }
 
-export { getConnection }
+export { createConnectionPool }
