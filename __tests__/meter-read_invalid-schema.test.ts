@@ -3,7 +3,7 @@ const app = require('../index')
 
 export {};
 
-describe('Test invalid schemae', () => {
+describe('Test error handling', () => {
 
     it('should NOT accept a schema with a missing customerId', (done) => {
         request(app).post('/meter-read')
