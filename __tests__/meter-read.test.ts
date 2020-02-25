@@ -25,7 +25,7 @@ const customer1Schema2 = {
     "readDate": "2017-12-20T18:24:32+00:00Z"
 }
 
-const customer2schema1 = {
+const customer2Schema1 = {
     "customerId": "identifier124",
     "serialNumber": "27263927195",
     "mpxn": "14582749",
@@ -74,7 +74,7 @@ describe('Test meter read functionality', () => {
     it('should accept a valid schema from customer 2 to the POST method', (done) => {
         request(app).post('/meter-read')
             .send(
-                customer2schema1
+                customer2Schema1
             ).then((response: any) => {
                 expect(response.statusCode).toBe(200);
                 expect(response.body.errors).not.toBeDefined();
