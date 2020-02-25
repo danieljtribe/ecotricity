@@ -22,9 +22,20 @@ app.use(bodyParser.json());
  * @param {any} next - Next Express middleware.
  */
 app.use(async (req: any, res: any, next: any) => {
-    databasePool = await createConnectionPool();
-    req.databasePool = databasePool;
-    next();
+    try {
+        databasePool = await createConnectionPool();
+        req.databasePool = databasePool;
+        await req.databasePool.getConnection();
+        next();
+    } catch(e) {
+        if(e.code === 'ENOTFOUND') {
+            res.status(500);
+            res.send({error: `Unable to establish connection to database.`});
+        } else {
+            res.status(500);
+            res.send({error: `Error establishing connection to database: ${e.code}`});
+        }
+    }
 });
 
 import { meter_read_router } from './routes/meter_read';
